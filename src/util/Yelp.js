@@ -1,0 +1,28 @@
+const apiKey = 'hI2QHbE_7X3gJMcrKBlHLhjbN3o5kQbB8AepQTES48G-87AqrS1Vmk_mT93dmfZAotAVS59oe8MW82nlqBe-yr40pZSd-1hEYbCBxc846qYX3Bt474HMZwbopfgxXXYx';
+
+ const Yelp = {
+    searchYelp(term, location, sortBy){
+        return fetch(`https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search?term=${term}&location=${location}&sort_by=${sortBy}`, {headers: {Authorization: `Bearer ${apiKey}`}}).then(response => {
+            return response.json()
+        }).then(jsonResponse => {
+            if (jsonResponse.businesses){
+               return jsonResponse.businesses.map(business => {
+                   return {
+                       id: business.id,
+                       imageSrc: business.image_url,
+                       name: business.name,
+                       address: business.location.address1,
+                       city: business.location.city,
+                       state: business.location.state,
+                       zipCode: business.location.zip_code,
+                       category: business.categories[0].title,
+                       rating: business.rating,
+                       reviewCount: business.rating.reviewCount
+                   }
+               })
+            }
+        })
+    }
+}
+
+export default Yelp;
